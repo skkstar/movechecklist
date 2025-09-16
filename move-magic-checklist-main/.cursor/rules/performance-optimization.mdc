@@ -1,0 +1,176 @@
+---
+globs: *.tsx,*.ts
+description: Performance optimization guidelines
+---
+
+# ⚡ Performance Optimization
+
+## 🎯 React Performance Rules
+- ✅ **Memoization**: Use `React.memo`, `useMemo`, `useCallback`
+- ✅ **Code Splitting**: Lazy load components and routes
+- ✅ **Bundle Optimization**: Tree shaking and dead code elimination
+- ✅ **Image Optimization**: Use proper formats and lazy loading
+- ❌ **Avoid unnecessary re-renders**
+
+## 🧠 Memoization Patterns
+```typescript
+// ✅ Memoized Component
+const ChecklistCard = React.memo(({ item, onToggle }: Props) => {
+  return (
+    <Card>
+      {/* Component content */}
+    </Card>
+  );
+});
+
+// ✅ Memoized Callbacks
+const ChecklistSection = ({ items }: Props) => {
+  const handleToggle = useCallback(async (id: string) => {
+    await toggleItem(id);
+  }, []);
+
+  const filteredItems = useMemo(() => {
+    return items.filter(item => !item.completed);
+  }, [items]);
+
+  return (
+    <div>
+      {filteredItems.map(item => (
+        <ChecklistCard 
+          key={item.id} 
+          item={item} 
+          onToggle={handleToggle} 
+        />
+      ))}
+    </div>
+  );
+};
+```
+
+## 🚀 Code Splitting & Lazy Loading
+```typescript
+// ✅ Lazy Route Loading
+const Moving = lazy(() => import('./pages/Moving'));
+const Furniture = lazy(() => import('./pages/Furniture'));
+
+// ✅ Suspense Wrapper
+<Suspense fallback={<div>Loading...</div>}>
+  <Routes>
+    <Route path="/moving" element={<Moving />} />
+    <Route path="/furniture" element={<Furniture />} />
+  </Routes>
+</Suspense>
+
+// ✅ Dynamic Imports
+const loadHeavyComponent = async () => {
+  const { HeavyComponent } = await import('./HeavyComponent');
+  return HeavyComponent;
+};
+```
+
+## 🖼️ Image Optimization
+```typescript
+// ✅ Optimized Image Component
+const OptimizedImage = ({ src, alt, ...props }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  
+  return (
+    <div className="relative">
+      {!isLoaded && (
+        <div className="absolute inset-0 bg-muted animate-pulse" />
+      )}
+      <img
+        src={src}
+        alt={alt}
+        onLoad={() => setIsLoaded(true)}
+        className={`transition-opacity ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+        {...props}
+      />
+    </div>
+  );
+};
+
+// ✅ Lazy Loading Images
+<img
+  src={imageSrc}
+  alt={alt}
+  loading="lazy"
+  className="w-full h-auto"
+/>
+```
+
+## 📊 Bundle Optimization
+```typescript
+// ✅ Tree Shaking - Import only what you need
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+// ❌ Avoid: import * from '@/components/ui';
+
+// ✅ Dynamic Imports for Heavy Libraries
+const loadChartLibrary = async () => {
+  const { Chart } = await import('chart.js');
+  return Chart;
+};
+
+// ✅ Conditional Imports
+if (process.env.NODE_ENV === 'development') {
+  const { whyDidYouRender } = await import('@welldone-software/why-did-you-render');
+  whyDidYouRender(React);
+}
+```
+
+## 🔄 State Management Optimization
+```typescript
+// ✅ Optimized State Updates
+const [items, setItems] = useState<Item[]>([]);
+
+// Use functional updates to avoid stale closures
+const updateItem = useCallback((id: string, updates: Partial<Item>) => {
+  setItems(prev => prev.map(item => 
+    item.id === id ? { ...item, ...updates } : item
+  ));
+}, []);
+
+// ✅ Debounced Search
+const useDebounce = (value: string, delay: number) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+
+  return debouncedValue;
+};
+```
+
+## 📱 Mobile Performance
+- **Touch Optimization**: Proper touch targets (44px minimum)
+- **Scroll Performance**: Use `transform` instead of changing layout properties
+- **Memory Management**: Clean up event listeners and subscriptions
+- **Battery Optimization**: Minimize animations and background processes
+
+## 🎯 Performance Monitoring
+```typescript
+// ✅ Performance Metrics
+const measurePerformance = (name: string, fn: () => void) => {
+  const start = performance.now();
+  fn();
+  const end = performance.now();
+  console.log(`${name} took ${end - start} milliseconds`);
+};
+
+// ✅ React DevTools Profiler
+import { Profiler } from 'react';
+
+const onRenderCallback = (id, phase, actualDuration) => {
+  console.log('Render:', { id, phase, actualDuration });
+};
+
+<Profiler id="ChecklistSection" onRender={onRenderCallback}>
+  <ChecklistSection />
+</Profiler>
+```

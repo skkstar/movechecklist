@@ -1,0 +1,64 @@
+---
+globs: *.ts,*.tsx
+description: TypeScript and React coding conventions
+---
+
+# 📝 TypeScript & React Conventions
+
+## 🎯 TypeScript Rules
+- ✅ **Always use function components** with TypeScript
+- ✅ **Define interfaces for all props** and state
+- ❌ **Never use `any` type** - use explicit typing
+- ✅ **Use optional chaining** (`?.`) for safe property access
+- ✅ **Prefer `const` over `let`** for immutable values
+- ✅ **Use type assertions sparingly** and with proper guards
+
+## ⚛️ React Patterns
+- **Custom Hooks**: Use `useAuth`, `use-mobile` pattern
+- **Context API**: For global state management
+- **Conditional Rendering**: Use clear conditional statements
+- **useEffect Dependencies**: Always specify dependency arrays correctly
+- **Event Handlers**: Prefix with `handle` (e.g., `handleSubmit`)
+
+## 🏗️ Component Structure Template
+```typescript
+interface ComponentProps {
+  // Define all props with proper types
+  title: string;
+  isActive?: boolean;
+  onAction: (id: string) => void;
+}
+
+const Component = ({ title, isActive = false, onAction }: ComponentProps) => {
+  // State and hooks
+  const [state, setState] = useState<Type>();
+  const { user } = useAuth();
+  
+  // Event handlers
+  const handleAction = async () => {
+    try {
+      await onAction('id');
+    } catch (error) {
+      console.error('Action failed:', error);
+    }
+  };
+  
+  // Early returns for loading/error states
+  if (!user) return <div>Loading...</div>;
+  
+  return (
+    <div className="component-wrapper">
+      {/* JSX content */}
+    </div>
+  );
+};
+
+export default Component;
+```
+
+## 🔒 Type Safety
+- **Strict TypeScript**: Enable strict mode
+- **Interface over Type**: Prefer interfaces for object shapes
+- **Generic Types**: Use for reusable components
+- **Union Types**: For multiple possible values
+- **Discriminated Unions**: For complex state management

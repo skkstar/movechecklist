@@ -1,0 +1,77 @@
+---
+globs: *.tsx,*.css
+description: Styling and UI design guidelines
+---
+
+# 🎨 Styling & UI Guidelines
+
+## 🎯 Tailwind CSS Rules
+- ✅ **Utility-first approach** - Use Tailwind classes
+- ✅ **Mobile-first responsive design** - `sm:`, `md:`, `lg:`, `xl:`, `2xl:`
+- ✅ **CSS Variables** - Use design system colors (`text-primary`, `bg-background`)
+- ✅ **Consistent spacing** - Use spacing scale (`space-y-4`, `p-6`, `gap-4`)
+- ❌ **Avoid custom CSS** - Prefer Tailwind utilities
+
+## 🎨 Design System Colors
+```css
+/* Primary Colors */
+text-primary, bg-primary
+text-secondary, bg-secondary
+text-accent, bg-accent
+
+/* Status Colors */
+text-success, bg-success
+text-warning, bg-warning
+text-destructive, bg-destructive
+
+/* Neutral Colors */
+text-foreground, bg-background
+text-muted-foreground, bg-muted
+text-card-foreground, bg-card
+```
+
+## 📱 Responsive Design Patterns
+```tsx
+// Container with responsive padding
+<div className="container mx-auto px-4 py-8 max-w-6xl">
+
+// Responsive grid
+<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+
+// Responsive text sizes
+<h1 className="text-3xl md:text-4xl lg:text-5xl">
+
+// Responsive spacing
+<div className="space-y-4 md:space-y-6 lg:space-y-8">
+```
+
+## 🧩 Component Styling Patterns
+```tsx
+// Card component with hover effects
+<Card className="p-6 space-y-4 hover:shadow-lg transition-all">
+
+// Button with icon and responsive text
+<Button size="sm" className="flex items-center space-x-1">
+  <Icon className="h-4 w-4" />
+  <span className="hidden sm:inline">Text</span>
+</Button>
+
+// Conditional styling
+<div className={`p-4 rounded-lg ${
+  isActive 
+    ? "bg-primary text-primary-foreground" 
+    : "bg-muted text-muted-foreground"
+}`}>
+```
+
+## 🎭 Animation & Transitions
+- **Hover Effects**: `hover:shadow-lg`, `hover:bg-muted/50`
+- **Transitions**: `transition-all`, `transition-colors`
+- **Loading States**: `animate-pulse`, `animate-spin`
+- **Smooth Interactions**: `duration-200`, `ease-in-out`
+
+## 📐 Layout Guidelines
+- **Flexbox**: `flex items-center justify-between`
+- **Grid**: `grid-cols-1 md:grid-cols-2 lg:grid-cols-3`
+- **Spacing**: Consistent use of `space-y-*`, `gap-*`
+- **Borders**: `border`, `border-border`, `rounded-lg`

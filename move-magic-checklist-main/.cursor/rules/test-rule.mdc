@@ -1,0 +1,15 @@
+---
+alwaysApply: true
+description: Test rule to verify Cursor Rules are working
+---
+
+# 🧪 Test Rule
+
+This is a test rule to verify that Cursor Rules are working properly.
+
+If you can see this rule, then the Cursor Rules system is functioning correctly!
+
+## Test Instructions
+- This rule should appear in every request
+- It should help the AI understand the project structure
+- If you see this, the rules are working! 🎉

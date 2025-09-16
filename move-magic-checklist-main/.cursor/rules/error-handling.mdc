@@ -1,0 +1,122 @@
+---
+alwaysApply: true
+description: Error handling and logging best practices
+---
+
+# 🚨 Error Handling & Logging
+
+## 🎯 Error Handling Patterns
+- ✅ **Try-catch for all async operations**
+- ✅ **User-friendly error messages**
+- ✅ **Console logging for debugging**
+- ✅ **Error boundaries for React components**
+- ✅ **Graceful degradation**
+
+## 📝 Error Handling Template
+```typescript
+const handleAsyncAction = async () => {
+  try {
+    setLoading(true);
+    setError(null);
+    
+    const result = await apiCall();
+    
+    // Success handling
+    toast.success('작업이 완료되었습니다.');
+    return result;
+    
+  } catch (error) {
+    console.error('Action failed:', error);
+    
+    // User-friendly error message
+    const errorMessage = error instanceof Error 
+      ? error.message 
+      : '알 수 없는 오류가 발생했습니다.';
+    
+    setError(errorMessage);
+    toast.error(errorMessage);
+    
+  } finally {
+    setLoading(false);
+  }
+};
+```
+
+## 🔍 Logging Guidelines
+- **Development**: Detailed logging with stack traces
+- **Production**: Minimal logging, no sensitive data
+- **Structured Logging**: Consistent message format
+- **Error Context**: Include relevant data for debugging
+
+## 🎨 User Feedback Patterns
+```typescript
+// ✅ Loading States
+{loading && (
+  <div className="flex items-center justify-center p-4">
+    <Loader2 className="h-6 w-6 animate-spin" />
+    <span className="ml-2">처리중...</span>
+  </div>
+)}
+
+// ✅ Error States
+{error && (
+  <Alert variant="destructive">
+    <AlertCircle className="h-4 w-4" />
+    <AlertTitle>오류 발생</AlertTitle>
+    <AlertDescription>{error}</AlertDescription>
+  </Alert>
+)}
+
+// ✅ Empty States
+{!loading && items.length === 0 && (
+  <div className="text-center py-8">
+    <Inbox className="h-12 w-12 mx-auto text-muted-foreground" />
+    <h3 className="mt-4 text-lg font-semibold">데이터가 없습니다</h3>
+    <p className="text-muted-foreground">새로운 항목을 추가해보세요.</p>
+  </div>
+)}
+```
+
+## 🛡️ Error Boundary Implementation
+```typescript
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('Error caught by boundary:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="p-8 text-center">
+          <AlertTriangle className="h-12 w-12 mx-auto text-destructive" />
+          <h2 className="mt-4 text-xl font-semibold">문제가 발생했습니다</h2>
+          <p className="text-muted-foreground">페이지를 새로고침해주세요.</p>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+```
+
+## 🔄 Retry Mechanisms
+- **Network Requests**: Implement retry logic
+- **User Actions**: Allow manual retry
+- **Exponential Backoff**: For repeated failures
+- **Circuit Breaker**: Prevent cascade failures
+
+## 📊 Error Monitoring
+- **Client-side Errors**: Log to console and external service
+- **Server Errors**: Monitor API response codes
+- **User Experience**: Track error impact on user flow
+- **Performance**: Monitor error-related performance issues

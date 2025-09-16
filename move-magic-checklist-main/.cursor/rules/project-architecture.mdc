@@ -1,0 +1,37 @@
+---
+alwaysApply: true
+description: Project architecture and structure guide
+---
+
+# 🏗️ Project Architecture Guide
+
+## 📁 Directory Structure
+- **Main Entry Point**: [src/main.tsx](mdc:move-magic-checklist-main/src/main.tsx) - React application bootstrap
+- **App Component**: [src/App.tsx](mdc:move-magic-checklist-main/src/App.tsx) - Main application wrapper with providers
+- **Configuration**: [vite.config.ts](mdc:move-magic-checklist-main/vite.config.ts) - Vite build configuration
+- **Styling**: [tailwind.config.ts](mdc:move-magic-checklist-main/tailwind.config.ts) - Tailwind CSS configuration
+
+## 🎯 Core Directories
+- `src/components/` - Reusable UI components
+  - `src/components/ui/` - shadcn/ui base components
+  - `src/components/Header.tsx` - Navigation header
+  - `src/components/ChecklistSection.tsx` - Main checklist functionality
+- `src/pages/` - Page components (Index, Moving, Furniture, NotFound)
+- `src/hooks/` - Custom React hooks (useAuth, use-mobile)
+- `src/integrations/supabase/` - Database client and types
+- `src/lib/` - Utility functions
+
+## 🔧 Technology Stack
+- **Frontend**: React 18 + TypeScript + Vite
+- **UI Library**: shadcn/ui + Radix UI + Tailwind CSS
+- **State Management**: React Query + Context API
+- **Backend**: Supabase (PostgreSQL + Auth + RLS)
+- **Routing**: React Router DOM
+- **Icons**: Lucide React
+
+## 🚀 Key Features
+- **Checklist Management**: D-Day based moving checklist
+- **User Authentication**: Google OAuth via Supabase
+- **Real-time Data**: Supabase real-time subscriptions
+- **Responsive Design**: Mobile-first approach
+- **Service Integration**: Moving/cleaning services, furniture shopping

@@ -1,0 +1,125 @@
+---
+globs: src/integrations/supabase/*,src/hooks/useAuth.tsx
+description: Supabase and database integration rules
+---
+
+# 🗄️ Supabase & Database Integration
+
+## 🔧 Supabase Client Usage
+- **Client Instance**: [src/integrations/supabase/client.ts](mdc:move-magic-checklist-main/src/integrations/supabase/client.ts)
+- **Type Definitions**: [src/integrations/supabase/types.ts](mdc:move-magic-checklist-main/src/integrations/supabase/types.ts)
+- **Authentication Hook**: [src/hooks/useAuth.tsx](mdc:move-magic-checklist-main/src/hooks/useAuth.tsx)
+
+## 🔒 Security Rules
+- ✅ **Row Level Security (RLS)** - Always enabled
+- ✅ **User-specific data isolation** - Use `auth.uid() = user_id`
+- ✅ **Error handling** - Always implement try-catch
+- ✅ **Loading states** - Show loading indicators
+- ❌ **Never expose sensitive data** - Use proper RLS policies
+
+## 📊 Database Query Patterns
+```typescript
+// ✅ Data Fetching with Error Handling
+const loadData = async () => {
+  try {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('moving_checklists')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at');
+
+    if (error) {
+      console.error('Error loading data:', error);
+      toast.error('데이터를 불러오는데 실패했습니다.');
+      return;
+    }
+
+    setData(data);
+  } catch (error) {
+    console.error('Unexpected error:', error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+// ✅ Data Insertion
+const createItem = async (itemData: InsertData) => {
+  const { data, error } = await supabase
+    .from('table_name')
+    .insert({ ...itemData, user_id: user.id })
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+};
+
+// ✅ Data Update
+const updateItem = async (id: string, updates: UpdateData) => {
+  const { error } = await supabase
+    .from('table_name')
+    .update(updates)
+    .eq('id', id)
+    .eq('user_id', user.id); // Security: ensure user owns the record
+
+  if (error) throw error;
+};
+```
+
+## 🔐 Authentication Patterns
+```typescript
+// ✅ Google OAuth Sign-in
+const signInWithGoogle = async () => {
+  const redirectUrl = `${window.location.origin}/`;
+  await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: redirectUrl }
+  });
+};
+
+// ✅ User Profile Creation
+const createUserProfile = async (user: User) => {
+  const { data: existingProfile } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('user_id', user.id)
+    .single();
+
+  if (!existingProfile) {
+    await supabase.from('profiles').insert({
+      user_id: user.id,
+      display_name: user.user_metadata?.full_name || user.email?.split('@')[0],
+      email: user.email,
+      avatar_url: user.user_metadata?.avatar_url,
+    });
+  }
+};
+```
+
+## 📈 Real-time Subscriptions
+```typescript
+// ✅ Real-time Data Updates
+useEffect(() => {
+  const subscription = supabase
+    .channel('checklist_changes')
+    .on('postgres_changes', {
+      event: '*',
+      schema: 'public',
+      table: 'moving_checklists',
+      filter: `user_id=eq.${user.id}`
+    }, (payload) => {
+      // Handle real-time updates
+      handleRealtimeUpdate(payload);
+    })
+    .subscribe();
+
+  return () => subscription.unsubscribe();
+}, [user.id]);
+```
+
+## 🚨 Error Handling Best Practices
+- **Network Errors**: Show user-friendly messages
+- **Permission Errors**: Redirect to login if needed
+- **Validation Errors**: Display field-specific errors
+- **Unexpected Errors**: Log details, show generic message

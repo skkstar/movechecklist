@@ -1,0 +1,255 @@
+---
+globs: *.test.ts,*.test.tsx,*.spec.ts,*.spec.tsx
+description: Testing guidelines and best practices
+---
+
+# 🧪 Testing Guidelines
+
+## 🎯 Testing Strategy
+- ✅ **Unit Tests**: Test individual functions and components
+- ✅ **Integration Tests**: Test component interactions
+- ✅ **E2E Tests**: Test complete user workflows
+- ✅ **Accessibility Tests**: Ensure WCAG compliance
+- ❌ **Avoid testing implementation details**
+
+## 🧩 Component Testing Patterns
+```typescript
+// ✅ Component Test Template
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import ChecklistCard from './ChecklistCard';
+
+const createTestQueryClient = () => new QueryClient({
+  defaultOptions: {
+    queries: { retry: false },
+    mutations: { retry: false },
+  },
+});
+
+const renderWithProviders = (component: React.ReactElement) => {
+  const queryClient = createTestQueryClient();
+  return render(
+    <QueryClientProvider client={queryClient}>
+      {component}
+    </QueryClientProvider>
+  );
+};
+
+describe('ChecklistCard', () => {
+  const mockItem = {
+    id: '1',
+    title: 'Test Item',
+    description: 'Test Description',
+    completed: false,
+    category: 'preparation',
+    d_day_range: 'D-7',
+    has_guide: true,
+    has_service: false,
+  };
+
+  it('renders checklist item correctly', () => {
+    renderWithProviders(
+      <ChecklistCard item={mockItem} onToggle={jest.fn()} />
+    );
+
+    expect(screen.getByText('Test Item')).toBeInTheDocument();
+    expect(screen.getByText('Test Description')).toBeInTheDocument();
+    expect(screen.getByText('D-7')).toBeInTheDocument();
+  });
+
+  it('calls onToggle when checkbox is clicked', async () => {
+    const mockToggle = jest.fn();
+    renderWithProviders(
+      <ChecklistCard item={mockItem} onToggle={mockToggle} />
+    );
+
+    const checkbox = screen.getByRole('checkbox');
+    fireEvent.click(checkbox);
+
+    await waitFor(() => {
+      expect(mockToggle).toHaveBeenCalledWith('1');
+    });
+  });
+
+  it('shows loading state correctly', () => {
+    renderWithProviders(
+      <ChecklistCard item={mockItem} onToggle={jest.fn()} loading={true} />
+    );
+
+    const checkbox = screen.getByRole('checkbox');
+    expect(checkbox).toBeDisabled();
+  });
+});
+```
+
+## 🔧 Custom Hook Testing
+```typescript
+// ✅ Hook Test Template
+import { renderHook, act } from '@testing-library/react';
+import { useAuth } from './useAuth';
+
+// Mock Supabase
+jest.mock('@/integrations/supabase/client', () => ({
+  supabase: {
+    auth: {
+      onAuthStateChange: jest.fn(),
+      getSession: jest.fn(),
+      signInWithOAuth: jest.fn(),
+      signOut: jest.fn(),
+    },
+  },
+}));
+
+describe('useAuth', () => {
+  it('initializes with null user', () => {
+    const { result } = renderHook(() => useAuth());
+    
+    expect(result.current.user).toBeNull();
+    expect(result.current.loading).toBe(true);
+  });
+
+  it('handles sign in correctly', async () => {
+    const { result } = renderHook(() => useAuth());
+    
+    await act(async () => {
+      await result.current.signInWithGoogle();
+    });
+
+    // Test sign in behavior
+  });
+});
+```
+
+## 🗄️ API Testing Patterns
+```typescript
+// ✅ Supabase Integration Test
+import { supabase } from '@/integrations/supabase/client';
+
+describe('Supabase Integration', () => {
+  beforeEach(() => {
+    // Mock Supabase responses
+    jest.clearAllMocks();
+  });
+
+  it('fetches checklist items correctly', async () => {
+    const mockData = [
+      { id: '1', title: 'Test Item', completed: false }
+    ];
+
+    jest.spyOn(supabase.from('moving_checklists'), 'select')
+      .mockReturnValue({
+        eq: jest.fn().mockReturnValue({
+          order: jest.fn().mockResolvedValue({ data: mockData, error: null })
+        })
+      } as any);
+
+    const result = await supabase
+      .from('moving_checklists')
+      .select('*')
+      .eq('user_id', 'test-user')
+      .order('created_at');
+
+    expect(result.data).toEqual(mockData);
+    expect(result.error).toBeNull();
+  });
+
+  it('handles API errors gracefully', async () => {
+    const mockError = new Error('Network error');
+    
+    jest.spyOn(supabase.from('moving_checklists'), 'select')
+      .mockReturnValue({
+        eq: jest.fn().mockReturnValue({
+          order: jest.fn().mockResolvedValue({ data: null, error: mockError })
+        })
+      } as any);
+
+    const result = await supabase
+      .from('moving_checklists')
+      .select('*')
+      .eq('user_id', 'test-user')
+      .order('created_at');
+
+    expect(result.error).toBe(mockError);
+    expect(result.data).toBeNull();
+  });
+});
+```
+
+## ♿ Accessibility Testing
+```typescript
+// ✅ Accessibility Test Template
+import { axe, toHaveNoViolations } from 'jest-axe';
+
+expect.extend(toHaveNoViolations);
+
+describe('Accessibility Tests', () => {
+  it('should not have accessibility violations', async () => {
+    const { container } = renderWithProviders(
+      <ChecklistCard item={mockItem} onToggle={jest.fn()} />
+    );
+
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
+
+  it('supports keyboard navigation', () => {
+    renderWithProviders(
+      <ChecklistCard item={mockItem} onToggle={jest.fn()} />
+    );
+
+    const checkbox = screen.getByRole('checkbox');
+    
+    // Test keyboard navigation
+    fireEvent.keyDown(checkbox, { key: 'Enter' });
+    fireEvent.keyDown(checkbox, { key: ' ' });
+    
+    // Verify keyboard interactions work
+  });
+});
+```
+
+## 🎭 Mock Patterns
+```typescript
+// ✅ Mock Supabase Client
+const mockSupabase = {
+  auth: {
+    onAuthStateChange: jest.fn(),
+    getSession: jest.fn(),
+    signInWithOAuth: jest.fn(),
+    signOut: jest.fn(),
+  },
+  from: jest.fn(() => ({
+    select: jest.fn(() => ({
+      eq: jest.fn(() => ({
+        order: jest.fn(() => Promise.resolve({ data: [], error: null }))
+      }))
+    })),
+    insert: jest.fn(() => ({
+      select: jest.fn(() => Promise.resolve({ data: [], error: null }))
+    })),
+    update: jest.fn(() => ({
+      eq: jest.fn(() => Promise.resolve({ data: [], error: null }))
+    }))
+  }))
+};
+
+// ✅ Mock React Query
+const createMockQueryClient = () => new QueryClient({
+  defaultOptions: {
+    queries: { retry: false },
+    mutations: { retry: false },
+  },
+});
+```
+
+## 📊 Test Coverage Goals
+- **Statements**: 90%+
+- **Branches**: 85%+
+- **Functions**: 90%+
+- **Lines**: 90%+
+
+## 🚀 Test Performance
+- **Parallel Execution**: Run tests in parallel
+- **Mock Heavy Dependencies**: Avoid real API calls in tests
+- **Focused Tests**: Test one thing at a time
+- **Fast Feedback**: Keep test execution under 5 seconds
