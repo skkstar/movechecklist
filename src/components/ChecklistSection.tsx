@@ -6,6 +6,7 @@ import { CheckCircle2, Circle, Calendar, ExternalLink, Info } from "lucide-react
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import GuideModal from "./GuideModal";
 
 interface ChecklistItem {
   id: string;
@@ -26,6 +27,8 @@ const ChecklistSection = ({ movingDate }: ChecklistSectionProps) => {
   const { user } = useAuth();
   const [checklist, setChecklist] = useState<ChecklistItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [guideModalOpen, setGuideModalOpen] = useState(false);
+  const [selectedGuideItem, setSelectedGuideItem] = useState<{ id: string; title: string } | null>(null);
 
   const categoryInfo = {
     preparation: { title: "이사 사전 준비", emoji: "📦", color: "bg-blue-500" },
@@ -209,25 +212,28 @@ const ChecklistSection = ({ movingDate }: ChecklistSectionProps) => {
   };
 
   const toggleItem = async (id: string) => {
-    if (!user) return;
-
     const item = checklist.find(item => item.id === id);
     if (!item) return;
 
-    const { error } = await supabase
-      .from('moving_checklists')
-      .update({ completed: !item.completed })
-      .eq('id', id);
+    // 로그인한 사용자의 경우 데이터베이스 업데이트
+    if (user) {
+      const { error } = await supabase
+        .from('moving_checklists')
+        .update({ completed: !item.completed })
+        .eq('id', id);
 
-    if (error) {
-      console.error('Error updating checklist item:', error);
-    } else {
-      setChecklist(prev =>
-        prev.map(item =>
-          item.id === id ? { ...item, completed: !item.completed } : item
-        )
-      );
+      if (error) {
+        console.error('Error updating checklist item:', error);
+        return; // 에러가 있으면 상태 업데이트하지 않음
+      }
     }
+
+    // 로컬 상태 업데이트 (로그인 여부와 관계없이)
+    setChecklist(prev =>
+      prev.map(item =>
+        item.id === id ? { ...item, completed: !item.completed } : item
+      )
+    );
   };
 
   const getItemsByCategory = (category: keyof typeof categoryInfo) => {
@@ -240,6 +246,16 @@ const ChecklistSection = ({ movingDate }: ChecklistSectionProps) => {
 
   const getTotalCount = (category: keyof typeof categoryInfo) => {
     return getItemsByCategory(category).length;
+  };
+
+  const handleGuideClick = (itemId: string, itemTitle: string) => {
+    setSelectedGuideItem({ id: itemId, title: itemTitle });
+    setGuideModalOpen(true);
+  };
+
+  const handleCloseGuide = () => {
+    setGuideModalOpen(false);
+    setSelectedGuideItem(null);
   };
 
   const getDDay = () => {
@@ -340,8 +356,7 @@ const ChecklistSection = ({ movingDate }: ChecklistSectionProps) => {
                 >
                   <button
                     onClick={() => toggleItem(item.id)}
-                    className="flex-shrink-0 mt-1"
-                    disabled={!user}
+                    className="flex-shrink-0 mt-1 hover:scale-110 transition-transform"
                   >
                     {item.completed ? (
                       <CheckCircle2 className="h-5 w-5 text-green-600" />
@@ -365,7 +380,11 @@ const ChecklistSection = ({ movingDate }: ChecklistSectionProps) => {
                     
                     <div className="flex items-center space-x-2 mt-3">
                       {item.has_guide && (
-                        <Button variant="outline" size="sm">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => handleGuideClick(item.id, item.title)}
+                        >
                           <Info className="h-4 w-4 mr-1" />
                           가이드
                         </Button>
@@ -392,6 +411,16 @@ const ChecklistSection = ({ movingDate }: ChecklistSectionProps) => {
           </p>
           <Button>구글 로그인하고 시작하기</Button>
         </Card>
+      )}
+
+      {/* 가이드 모달 */}
+      {selectedGuideItem && (
+        <GuideModal
+          isOpen={guideModalOpen}
+          onClose={handleCloseGuide}
+          itemId={selectedGuideItem.id}
+          itemTitle={selectedGuideItem.title}
+        />
       )}
     </div>
   );

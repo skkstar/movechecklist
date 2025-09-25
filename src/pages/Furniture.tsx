@@ -23,102 +23,138 @@ const Furniture = () => {
   const furnitureItems = [
     {
       id: "table1",
-      name: "모던 다이닝 테이블",
-      price: 129000,
-      originalPrice: 179000,
-      rating: 4.8,
-      reviews: 234,
-      image: "🪑",
-      category: "table",
+      name: "모던 책상",
+      price: 159000,
+      originalPrice: 199000,
+      rating: 4.9,
+      reviews: 312,
+      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop&q=80", // 책상 이미지
+      category: "desk",
       brand: "IKEA",
-      features: ["4인용", "원목소재", "조립식"]
+      features: ["원목소재", "수납공간", "모던"]
+    },
+    {
+      id: "chair1",
+      name: "모던 다이닝 체어",
+      price: 199000,
+      originalPrice: 259000,
+      rating: 4.7,
+      reviews: 189,
+      image: "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&h=300&fit=crop&q=80",
+      category: "chair",
+      brand: "한샘",
+      features: ["4개 세트", "패브릭", "모던"]
     },
     {
       id: "sofa1",
-      name: "컴팩트 2인 소파",
+      name: "스칸디나비아 2인 소파",
       price: 299000,
       originalPrice: 399000,
       rating: 4.7,
       reviews: 156,
-      image: "🛋️",
+      image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop&q=80",
       category: "sofa",
       brand: "한샘",
-      features: ["패브릭", "2인용", "색상선택"]
+      features: ["패브릭", "2인용", "스칸디"]
     },
     {
       id: "table2", 
-      name: "접이식 원목 식탁",
+      name: "접이식 미니 테이블",
       price: 89000,
       originalPrice: 119000,
       rating: 4.6,
       reviews: 89,
-      image: "🪑",
+      image: "https://images.unsplash.com/photo-1551298370-9d3d52b0b8c7?w=400&h=300&fit=crop&q=80", // 테이블 이미지
       category: "table",
       brand: "리바트",
       features: ["접이식", "원목", "소형"]
     },
     {
+      id: "chair2",
+      name: "인더스트리얼 스툴",
+      price: 79000,
+      originalPrice: 99000,
+      rating: 4.5,
+      reviews: 67,
+      image: "https://images.unsplash.com/photo-1581578731548-c6a0c3f2f2c0?w=400&h=300&fit=crop&q=80", // 스툴 이미지
+      category: "chair",
+      brand: "리바트",
+      features: ["2개 세트", "스툴", "인더스트리얼"]
+    },
+    {
       id: "light1",
-      name: "LED 펜던트 조명",
+      name: "미니멀 펜던트 라이트",
       price: 45000,
       originalPrice: 65000,
       rating: 4.9,
       reviews: 312,
-      image: "💡",
+      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop&q=80",
       category: "lighting",
       brand: "필립스",
-      features: ["LED", "밝기조절", "모던스타일"]
+      features: ["LED", "밝기조절", "미니멀"]
     }
   ];
 
   const applianceItems = [
     {
-      id: "vacuum1",
-      name: "무선 스틱 청소기",
-      price: 189000,
-      originalPrice: 249000,
+      id: "tv1",
+      name: "스마트 TV",
+      price: 299000,
+      originalPrice: 399000,
       rating: 4.8,
       reviews: 445,
-      image: vacuumCleanerImg,
-      category: "vacuum",
-      brand: "LG전자",
-      features: ["무선", "2in1", "60분사용"]
+      image: "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=400&h=300&fit=crop&q=80", // TV 이미지
+      category: "tv",
+      brand: "삼성전자",
+      features: ["55인치", "4K", "스마트"]
     },
     {
       id: "fridge1",
-      name: "소형 냉장고 168L",
+      name: "스마트 미니 냉장고",
       price: 359000,
       originalPrice: 429000,
       rating: 4.7,
       reviews: 278,
-      image: refrigeratorImg,
+      image: "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=400&h=300&fit=crop&q=80", // 냉장고 이미지
       category: "refrigerator",
       brand: "삼성전자",
-      features: ["168L", "1도어", "저소음"]
+      features: ["168L", "스마트", "저소음"]
     },
     {
       id: "washing1",
-      name: "드럼 세탁기 8kg",
-      price: 599000,
-      originalPrice: 799000,
+      name: "드럼 세탁기",
+      price: 459000,
+      originalPrice: 599000,
       rating: 4.6,
       reviews: 189,
-      image: washingMachineImg,
+      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop&q=80", // 세탁기 이미지
       category: "washing",
       brand: "LG전자",
-      features: ["8kg", "인버터", "직구동"]
+      features: ["9kg", "드럼", "스마트"]
     },
     {
       id: "aircon1",
-      name: "벽걸이 에어컨 9평형",
-      price: 449000,
-      originalPrice: 599000,
+      name: "벽걸이 에어컨",
+      price: 399000,
+      originalPrice: 499000,
       rating: 4.8,
       reviews: 334,
-      image: airConditionerImg,
+      image: "https://images.unsplash.com/photo-1581578731548-c6a0c3f2f2c0?w=400&h=300&fit=crop&q=80", // 에어컨 이미지
       category: "aircon",
       brand: "삼성전자",
-      features: ["9평형", "인버터", "무풍"]
+      features: ["1.5마력", "벽걸이", "스마트"]
+    },
+    {
+      id: "vacuum1",
+      name: "무선 청소기",
+      price: 199000,
+      originalPrice: 299000,
+      rating: 4.7,
+      reviews: 267,
+      image: "https://images.unsplash.com/photo-1631545806609-2c4b9e5ad8b7?w=400&h=300&fit=crop&q=80", // 청소기 이미지
+      category: "vacuum",
+      brand: "다이슨",
+      features: ["무선", "강력흡입", "배터리"]
     }
   ];
 
@@ -127,34 +163,22 @@ const Furniture = () => {
     const isFavorite = favorites.includes(item.id);
     
     return (
-      <Card className="p-4 space-y-4 hover:shadow-lg transition-all">
+      <Card className="p-4 space-y-4 hover:shadow-lg transition-all group">
         <div className="relative">
-          {typeof item.image === 'string' && item.image.startsWith('/') ? (
-            <div className="h-32 bg-muted/30 rounded-lg overflow-hidden flex items-center justify-center">
-              <img 
-                src={item.image} 
-                alt={item.name}
-                className="w-20 h-20 object-contain"
-              />
-            </div>
-          ) : (
-            <div className="text-6xl text-center py-6 bg-muted/30 rounded-lg">
-              {typeof item.image === 'string' ? item.image : (
-                <img 
-                  src={item.image} 
-                  alt={item.name}
-                  className="w-20 h-20 object-contain mx-auto"
-                />
-              )}
-            </div>
-          )}
+          <div className="h-48 bg-muted/30 rounded-lg overflow-hidden">
+            <img 
+              src={item.image} 
+              alt={item.name}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+          </div>
           <Button
             variant="ghost"
             size="sm"
-            className="absolute top-2 right-2 p-2"
+            className="absolute top-2 right-2 p-2 bg-white/80 hover:bg-white"
             onClick={() => toggleFavorite(item.id)}
           >
-            <Heart className={`h-4 w-4 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
+            <Heart className={`h-4 w-4 ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
           </Button>
           <Badge className="absolute top-2 left-2 bg-destructive text-destructive-foreground">
             {discount}% 할인
@@ -174,7 +198,7 @@ const Furniture = () => {
           </div>
 
           <div className="flex flex-wrap gap-1">
-            {item.features.map((feature: string, index: number) => (
+            {item.features?.map((feature: string, index: number) => (
               <Badge key={index} variant="outline" className="text-xs py-0">
                 {feature}
               </Badge>
