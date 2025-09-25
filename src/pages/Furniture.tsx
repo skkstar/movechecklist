@@ -20,6 +20,7 @@ const Furniture = () => {
     );
   };
 
+  // 가구 4개로 축소
   const furnitureItems = [
     {
       id: "table1",
@@ -28,7 +29,7 @@ const Furniture = () => {
       originalPrice: 199000,
       rating: 4.9,
       reviews: 312,
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop&q=80", // 책상 이미지
+      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop&q=80",
       category: "desk",
       brand: "IKEA",
       features: ["원목소재", "수납공간", "모던"]
@@ -58,30 +59,6 @@ const Furniture = () => {
       features: ["패브릭", "2인용", "스칸디"]
     },
     {
-      id: "table2", 
-      name: "접이식 미니 테이블",
-      price: 89000,
-      originalPrice: 119000,
-      rating: 4.6,
-      reviews: 89,
-      image: "https://images.unsplash.com/photo-1551298370-9d3d52b0b8c7?w=400&h=300&fit=crop&q=80", // 테이블 이미지
-      category: "table",
-      brand: "리바트",
-      features: ["접이식", "원목", "소형"]
-    },
-    {
-      id: "chair2",
-      name: "인더스트리얼 스툴",
-      price: 79000,
-      originalPrice: 99000,
-      rating: 4.5,
-      reviews: 67,
-      image: "https://images.unsplash.com/photo-1581578731548-c6a0c3f2f2c0?w=400&h=300&fit=crop&q=80", // 스툴 이미지
-      category: "chair",
-      brand: "리바트",
-      features: ["2개 세트", "스툴", "인더스트리얼"]
-    },
-    {
       id: "light1",
       name: "미니멀 펜던트 라이트",
       price: 45000,
@@ -95,19 +72,8 @@ const Furniture = () => {
     }
   ];
 
+  // 가전 4개로 축소하고 로컬 이미지 사용
   const applianceItems = [
-    {
-      id: "tv1",
-      name: "스마트 TV",
-      price: 299000,
-      originalPrice: 399000,
-      rating: 4.8,
-      reviews: 445,
-      image: "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=400&h=300&fit=crop&q=80", // TV 이미지
-      category: "tv",
-      brand: "삼성전자",
-      features: ["55인치", "4K", "스마트"]
-    },
     {
       id: "fridge1",
       name: "스마트 미니 냉장고",
@@ -115,7 +81,7 @@ const Furniture = () => {
       originalPrice: 429000,
       rating: 4.7,
       reviews: 278,
-      image: "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=400&h=300&fit=crop&q=80", // 냉장고 이미지
+      image: refrigeratorImg, // 로컬 이미지 사용
       category: "refrigerator",
       brand: "삼성전자",
       features: ["168L", "스마트", "저소음"]
@@ -127,7 +93,7 @@ const Furniture = () => {
       originalPrice: 599000,
       rating: 4.6,
       reviews: 189,
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop&q=80", // 세탁기 이미지
+      image: washingMachineImg, // 로컬 이미지 사용
       category: "washing",
       brand: "LG전자",
       features: ["9kg", "드럼", "스마트"]
@@ -139,7 +105,7 @@ const Furniture = () => {
       originalPrice: 499000,
       rating: 4.8,
       reviews: 334,
-      image: "https://images.unsplash.com/photo-1581578731548-c6a0c3f2f2c0?w=400&h=300&fit=crop&q=80", // 에어컨 이미지
+      image: airConditionerImg, // 로컬 이미지 사용
       category: "aircon",
       brand: "삼성전자",
       features: ["1.5마력", "벽걸이", "스마트"]
@@ -151,7 +117,7 @@ const Furniture = () => {
       originalPrice: 299000,
       rating: 4.7,
       reviews: 267,
-      image: "https://images.unsplash.com/photo-1631545806609-2c4b9e5ad8b7?w=400&h=300&fit=crop&q=80", // 청소기 이미지
+      image: vacuumCleanerImg, // 로컬 이미지 사용
       category: "vacuum",
       brand: "다이슨",
       features: ["무선", "강력흡입", "배터리"]
