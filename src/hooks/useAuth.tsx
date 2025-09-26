@@ -66,15 +66,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: window.location.origin,
+          redirectTo: `${window.location.origin}/`,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
         },
       });
       
       if (error) {
         console.error('Google OAuth error:', error);
+        alert('로그인 중 오류가 발생했습니다: ' + error.message);
       }
     } catch (error) {
       console.error('Sign in error:', error);
+      alert('로그인 중 오류가 발생했습니다.');
     }
   };
 
