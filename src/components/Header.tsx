@@ -50,6 +50,16 @@ const Header = () => {
           >
             가구/가전
           </Link>
+          <Link
+            to="/blog"
+            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              isActive("/blog")
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted"
+            }`}
+          >
+            블로그
+          </Link>
         </nav>
         
         {/* Auth Section */}
