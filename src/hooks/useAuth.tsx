@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     // 배포 환경에서는 명시적으로 도메인 설정
     const redirectUrl = window.location.hostname === 'localhost' 
       ? `${window.location.origin}/`
-      : 'https://movechecklist.vercel.app/';
+      : 'https://movechecklist-917k.vercel.app/';
     
     await supabase.auth.signInWithOAuth({
       provider: 'google',
