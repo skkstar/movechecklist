@@ -62,17 +62,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const signInWithGoogle = async () => {
-    // 배포 환경에서는 명시적으로 도메인 설정
-    const redirectUrl = window.location.hostname === 'localhost' 
-      ? `${window.location.origin}/`
-      : 'https://movechecklist-917k.vercel.app/';
-    
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: redirectUrl,
-      },
-    });
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin,
+        },
+      });
+      
+      if (error) {
+        console.error('Google OAuth error:', error);
+      }
+    } catch (error) {
+      console.error('Sign in error:', error);
+    }
   };
 
   const signOut = async () => {
