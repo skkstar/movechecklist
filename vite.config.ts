@@ -15,18 +15,5 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  build: {
-    rollupOptions: {
-      output: {
-        assetFileNames: (assetInfo) => {
-          // RSS와 사이트맵은 루트에 유지
-          if (assetInfo.name === 'rss.xml' || assetInfo.name === 'sitemap.xml') {
-            return '[name].[ext]';
-          }
-          return 'assets/[name]-[hash].[ext]';
-        }
-      }
-    }
-  },
   publicDir: 'public',
 }));
