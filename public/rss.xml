@@ -6,20 +6,12 @@
     <link>https://movechecklist-917k.vercel.app/blog</link>
     <language>ko-KR</language>
     <copyright>Copyright 2024 이사요</copyright>
-    <managingEditor>contact@your-domain.com (이사요팀)</managingEditor>
-    <webMaster>contact@your-domain.com (이사요팀)</webMaster>
+    <managingEditor>contact@movechecklist-917k.vercel.app (이사요팀)</managingEditor>
+    <webMaster>contact@movechecklist-917k.vercel.app (이사요팀)</webMaster>
     <lastBuildDate>Wed, 15 Jan 2024 00:00:00 +0900</lastBuildDate>
     <pubDate>Wed, 15 Jan 2024 00:00:00 +0900</pubDate>
     <ttl>60</ttl>
     <atom:link href="https://movechecklist-917k.vercel.app/rss.xml" rel="self" type="application/rss+xml"/>
-    <image>
-      <url>https://movechecklist-917k.vercel.app/logo.png</url>
-      <title>이사요 블로그</title>
-      <link>https://movechecklist-917k.vercel.app/blog</link>
-      <width>144</width>
-      <height>144</height>
-      <description>이사요 블로그 RSS 피드</description>
-    </image>
 
     <!-- 블로그 포스트 1 -->
     <item>
