@@ -4,8 +4,5 @@ Allow: /
 # 사이트맵 위치
 Sitemap: https://movechecklist.vercel.app/sitemap.xml
 
-# RSS 피드
-Sitemap: https://movechecklist.vercel.app/rss.xml
-
 # 크롤링 지연 (선택사항)
 Crawl-delay: 1
