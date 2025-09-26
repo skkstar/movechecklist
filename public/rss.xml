@@ -3,7 +3,7 @@
   <channel>
     <title>이사요 블로그 - 스마트한 이사 준비 가이드</title>
     <description>성공적인 이사를 위한 체계적인 가이드와 실용적인 팁을 제공합니다. 이사 체크리스트, 업체 선택, 보험, 정리정돈까지 모든 것을 다룹니다.</description>
-    <link>https://your-domain.com/blog</link>
+    <link>https://movechecklist.vercel.app/blog</link>
     <language>ko-KR</language>
     <copyright>Copyright 2024 이사요</copyright>
     <managingEditor>contact@your-domain.com (이사요팀)</managingEditor>
@@ -11,11 +11,11 @@
     <lastBuildDate>Wed, 15 Jan 2024 00:00:00 +0900</lastBuildDate>
     <pubDate>Wed, 15 Jan 2024 00:00:00 +0900</pubDate>
     <ttl>60</ttl>
-    <atom:link href="https://your-domain.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <atom:link href="https://movechecklist.vercel.app/rss.xml" rel="self" type="application/rss+xml"/>
     <image>
-      <url>https://your-domain.com/logo.png</url>
+      <url>https://movechecklist.vercel.app/logo.png</url>
       <title>이사요 블로그</title>
-      <link>https://your-domain.com/blog</link>
+      <link>https://movechecklist.vercel.app/blog</link>
       <width>144</width>
       <height>144</height>
       <description>이사요 블로그 RSS 피드</description>
@@ -25,8 +25,8 @@
     <item>
       <title>이사 체크리스트의 중요성과 효과적인 활용법</title>
       <description>이사 준비 과정에서 체크리스트가 왜 중요한지, 그리고 어떻게 효과적으로 활용할 수 있는지 알아보세요.</description>
-      <link>https://your-domain.com/blog/moving-checklist-importance</link>
-      <guid isPermaLink="true">https://your-domain.com/blog/moving-checklist-importance</guid>
+      <link>https://movechecklist.vercel.app/blog/moving-checklist-importance</link>
+      <guid isPermaLink="true">https://movechecklist.vercel.app/blog/moving-checklist-importance</guid>
       <pubDate>Mon, 15 Jan 2024 00:00:00 +0900</pubDate>
       <category>이사 준비</category>
       <category>이사체크리스트</category>
@@ -38,8 +38,8 @@
     <item>
       <title>이사 보증보험의 모든 것: 선택부터 활용까지</title>
       <description>이사 과정에서 발생할 수 있는 다양한 위험에 대비하는 이사 보증보험에 대해 자세히 알아보세요.</description>
-      <link>https://your-domain.com/blog/moving-insurance-guide</link>
-      <guid isPermaLink="true">https://your-domain.com/blog/moving-insurance-guide</guid>
+      <link>https://movechecklist.vercel.app/blog/moving-insurance-guide</link>
+      <guid isPermaLink="true">https://movechecklist.vercel.app/blog/moving-insurance-guide</guid>
       <pubDate>Wed, 10 Jan 2024 00:00:00 +0900</pubDate>
       <category>보험</category>
       <category>이사보험</category>
@@ -51,8 +51,8 @@
     <item>
       <title>신뢰할 수 있는 이사업체와 청소업체 선택하는 완벽 가이드</title>
       <description>안전하고 만족스러운 이사를 위한 이사업체와 청소업체 선택 방법을 상세히 알아보세요.</description>
-      <link>https://your-domain.com/blog/moving-company-selection-guide</link>
-      <guid isPermaLink="true">https://your-domain.com/blog/moving-company-selection-guide</guid>
+      <link>https://movechecklist.vercel.app/blog/moving-company-selection-guide</link>
+      <guid isPermaLink="true">https://movechecklist.vercel.app/blog/moving-company-selection-guide</guid>
       <pubDate>Mon, 08 Jan 2024 00:00:00 +0900</pubDate>
       <category>업체 선택</category>
       <category>이사업체</category>
@@ -64,8 +64,8 @@
     <item>
       <title>친환경 이사: 가전제품과 가구 무료 수거, 헌옷 기부 방법</title>
       <description>이사 과정에서 환경을 생각하는 친환경 이사 방법을 알아보세요. 가전제품 무료 수거부터 헌옷 기부까지.</description>
-      <link>https://your-domain.com/blog/eco-friendly-moving-guide</link>
-      <guid isPermaLink="true">https://your-domain.com/blog/eco-friendly-moving-guide</guid>
+      <link>https://movechecklist.vercel.app/blog/eco-friendly-moving-guide</link>
+      <guid isPermaLink="true">https://movechecklist.vercel.app/blog/eco-friendly-moving-guide</guid>
       <pubDate>Fri, 05 Jan 2024 00:00:00 +0900</pubDate>
       <category>환경 보호</category>
       <category>친환경이사</category>
@@ -77,8 +77,8 @@
     <item>
       <title>이사 후 정리정돈 완벽 가이드: 새 집 정착하기</title>
       <description>이사 후 새 집에서 효율적으로 정리정돈하는 방법과 체계적인 정착 계획을 세워보세요.</description>
-      <link>https://your-domain.com/blog/moving-after-organization-guide</link>
-      <guid isPermaLink="true">https://your-domain.com/blog/moving-after-organization-guide</guid>
+      <link>https://movechecklist.vercel.app/blog/moving-after-organization-guide</link>
+      <guid isPermaLink="true">https://movechecklist.vercel.app/blog/moving-after-organization-guide</guid>
       <pubDate>Wed, 03 Jan 2024 00:00:00 +0900</pubDate>
       <category>정리 정돈</category>
       <category>이사후정리</category>
@@ -90,8 +90,8 @@
     <item>
       <title>이사 비용 절약하는 스마트한 방법들</title>
       <description>이사 비용을 효과적으로 절약할 수 있는 다양한 방법과 노하우를 알아보세요. 합리적인 이사 준비를 위한 완벽 가이드입니다.</description>
-      <link>https://your-domain.com/blog/moving-cost-saving-tips</link>
-      <guid isPermaLink="true">https://your-domain.com/blog/moving-cost-saving-tips</guid>
+      <link>https://movechecklist.vercel.app/blog/moving-cost-saving-tips</link>
+      <guid isPermaLink="true">https://movechecklist.vercel.app/blog/moving-cost-saving-tips</guid>
       <pubDate>Mon, 01 Jan 2024 00:00:00 +0900</pubDate>
       <category>이사 준비</category>
       <category>이사비용</category>
