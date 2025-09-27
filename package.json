@@ -8,7 +8,214 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "design:components": "echo 'shadcn/ui 컴포넌트 추가: npx shadcn@latest add [컴포넌트명]'",
+    "design:theme": "echo '테마 색상 변경: tailwind.config.ts 수정'",
+    "design:icons": "echo '아이콘 추가: lucide-react에서 import'",
+    "design:fonts": "echo '폰트 추가: Google Fonts 또는 로컬 폰트'",
+    "design:responsive": "echo '반응형 디자인: Tailwind breakpoints 사용'",
+    "design:dark-mode": "echo '다크모드: next-themes 활용'"
+  },
+  "designSystem": {
+    "componentStyles": {
+      "navigationBar": {
+        "surfaceColor": "#FFFFFF",
+        "borderTreatment": "없음",
+        "textColor": "#6F42C1",
+        "activeTabBackground": "#6F42C1",
+        "activeTabTextColor": "#FFFFFF",
+        "font": {
+          "family": "산세리프",
+          "weight": "600",
+          "size": "14px"
+        }
+      },
+      "pageBackground": {
+        "surfaceColor": "#F1ECFF"
+      },
+      "primaryContainer": {
+        "surfaceColor": "#F5F4FF",
+        "borderTreatment": "없음",
+        "borderRadius": "12px",
+        "boxShadow": "0 6px 20px rgba(111, 66, 193, 0.12)",
+        "padding": "24px"
+      },
+      "buttonPrimary": {
+        "surfaceColor": "#6F42C1",
+        "textColor": "#FFFFFF",
+        "borderRadius": "20px",
+        "fontWeight": "600",
+        "fontSize": "13px",
+        "interactionStates": {
+          "hoverSurface": "#522D99",
+          "activeSurface": "#3E1F73",
+          "disabledSurface": "#A3A3A3",
+          "disabledText": "#E0E0E0"
+        },
+        "padding": "8px 16px"
+      },
+      "buttonSecondary": {
+        "surfaceColor": "#FFFFFF",
+        "textColor": "#6F42C1",
+        "borderRadius": "20px",
+        "fontWeight": "600",
+        "fontSize": "13px",
+        "border": "1px solid #6F42C1",
+        "interactionStates": {
+          "hoverSurface": "#F5F4FF",
+          "activeSurface": "#E0DBFF",
+          "disabledSurface": "#F0F0F0",
+          "disabledText": "#A3A3A3"
+        },
+        "padding": "8px 16px"
+      },
+      "typography": {
+        "heading1": {
+          "color": "#000000",
+          "fontWeight": "700",
+          "fontSize": "28px",
+          "lineHeight": "34px"
+        },
+        "heading2": {
+          "color": "#6F42C1",
+          "fontWeight": "600",
+          "fontSize": "20px",
+          "lineHeight": "26px"
+        },
+        "bodyPrimary": {
+          "color": "#000000",
+          "fontWeight": "400",
+          "fontSize": "14px",
+          "lineHeight": "20px"
+        },
+        "bodySecondary": {
+          "color": "#6F42C1",
+          "fontWeight": "600",
+          "fontSize": "14px",
+          "lineHeight": "20px"
+        },
+        "caption": {
+          "color": "#6F42C1",
+          "fontWeight": "400",
+          "fontSize": "12px",
+          "lineHeight": "16px"
+        }
+      },
+      "taskCard": {
+        "surfaceColor": "#FFFFFF",
+        "borderRadius": "12px",
+        "boxShadow": "0 6px 20px rgba(111, 66, 193, 0.12)",
+        "border": "1px solid #E9ECEF",
+        "padding": "16px",
+        "textColor": "#000000",
+        "taskStatusColors": {
+          "toDo": "#E9D8FD",
+          "inProgress": "#FFD8D8",
+          "inReview": "#D8FDFA",
+          "completed": "#D8F7D8"
+        }
+      },
+      "inputFields": {
+        "surfaceColor": "#FFFFFF",
+        "borderColor": "#DEE2E6",
+        "borderRadius": "8px",
+        "textColor": "#495057",
+        "placeholderColor": "#ADB5BD",
+        "focusBorderColor": "#6F42C1",
+        "boxShadowFocus": "0 0 0 0.2rem rgba(111, 66, 193, 0.25)"
+      },
+      "avatars": {
+        "size": "32px",
+        "borderRadius": "50%",
+        "border": "2px solid #FFFFFF",
+        "boxShadow": "0 0 4px rgba(0,0,0,0.1)"
+      },
+      "icons": {
+        "fillColor": "#6F42C1",
+        "size": "20px",
+        "background": "투명"
+      },
+      "overlayEffects": {
+        "modalBackdrop": {
+          "color": "rgba(0, 0, 0, 0.4)"
+        }
+      }
+    },
+    "visualTreatmentInventory": {
+      "shadowDistribution": {
+        "primaryContainers": "0 6px 20px rgba(111, 66, 193, 0.12)",
+        "taskCards": "0 6px 20px rgba(111, 66, 193, 0.12)",
+        "avatars": "0 0 4px rgba(0,0,0,0.1)"
+      },
+      "radiusApplication": {
+        "primaryContainers": "12px",
+        "taskCards": "12px",
+        "buttons": "20px",
+        "inputFields": "8px",
+        "avatars": "50%"
+      },
+      "layeringHierarchy": {
+        "navigationBar": "z-index: 10",
+        "primaryContainer": "z-index: 5",
+        "modals": "z-index: 50"
+      }
+    },
+    "componentStateArchitecture": {
+      "buttonPrimary": {
+        "default": {
+          "surfaceColor": "#6F42C1",
+          "textColor": "#FFFFFF"
+        },
+        "hover": {
+          "surfaceColor": "#522D99"
+        },
+        "active": {
+          "surfaceColor": "#3E1F73"
+        },
+        "disabled": {
+          "surfaceColor": "#A3A3A3",
+          "textColor": "#E0E0E0"
+        }
+      },
+      "buttonSecondary": {
+        "default": {
+          "surfaceColor": "#FFFFFF",
+          "textColor": "#6F42C1"
+        },
+        "hover": {
+          "surfaceColor": "#F5F4FF"
+        },
+        "active": {
+          "surfaceColor": "#E0DBFF"
+        },
+        "disabled": {
+          "surfaceColor": "#F0F0F0",
+          "textColor": "#A3A3A3"
+        }
+      },
+      "inputFields": {
+        "default": {
+          "borderColor": "#DEE2E6"
+        },
+        "focus": {
+          "borderColor": "#6F42C1",
+          "boxShadow": "0 0 0 0.2rem rgba(111, 66, 193, 0.25)"
+        },
+        "disabled": {
+          "borderColor": "#E9ECEF",
+          "textColor": "#ADB5BD"
+        }
+      }
+    },
+    "qualityAssurance": {
+      "guidelines": [
+        "아이콘이나 텍스트 요소에 그라디언트 배경을 적용하지 마십시오.",
+        "버튼 텍스트 색상을 일반 타이포그래피에 사용하지 마십시오.",
+        "그림자 효과는 컨테이너에만 적용하고 내부 콘텐츠에는 적용하지 마십시오.",
+        "모든 상호작용 상태에서 색상 사용 일관성을 유지하십시오.",
+        "텍스트와 배경 간의 대비가 WCAG AA 기준(최소 4.5:1 비율)을 충족하는지 확인하십시오."
+      ]
+    }
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

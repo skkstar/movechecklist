@@ -20,12 +20,32 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "#6F42C1",
+          foreground: "#FFFFFF",
+          hover: "#522D99",
+          active: "#3E1F73",
+          disabled: "#A3A3A3",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "#FFFFFF",
+          foreground: "#6F42C1",
+          hover: "#F5F4FF",
+          active: "#E0DBFF",
+          disabled: "#F0F0F0",
+        },
+        // 디자인 시스템 색상
+        purple: {
+          50: "#F1ECFF",
+          100: "#F5F4FF",
+          500: "#6F42C1",
+          600: "#522D99",
+          700: "#3E1F73",
+        },
+        task: {
+          todo: "#E9D8FD",
+          inProgress: "#FFD8D8",
+          inReview: "#D8FDFA",
+          completed: "#D8F7D8",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -70,6 +90,11 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        // 디자인 시스템 반경
+        container: "12px",
+        card: "12px",
+        button: "20px",
+        input: "8px",
       },
       keyframes: {
         "accordion-down": {

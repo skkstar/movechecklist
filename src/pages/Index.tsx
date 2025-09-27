@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Calendar, Target, CheckCircle, Clock, Users, X, Play } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import ChecklistSection from "@/components/ChecklistSection";
 
@@ -15,10 +15,11 @@ const Index = () => {
   const [showChecklistTutorial, setShowChecklistTutorial] = useState(false);
   const [hasSeenTutorial, setHasSeenTutorial] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, signInWithGoogle } = useAuth();
 
   const minDate = new Date();
-  minDate.setDate(minDate.getDate() + 14); // 최소 14일 후
+  minDate.setDate(minDate.getDate() + 20); // 최소 20일 후
 
   // 로컬 스토리지에서 튜토리얼 확인 상태 가져오기
   useEffect(() => {
@@ -26,20 +27,18 @@ const Index = () => {
     setHasSeenTutorial(seen === 'true');
   }, []);
 
-  // 이사날짜가 입력되고 로그인된 상태일 때 튜토리얼 표시
+  // 로그인 후 튜토리얼 표시 (날짜 설정 전까지)
   useEffect(() => {
-    if (movingDate && user && !hasSeenTutorial) {
+    if (user && !movingDate && !hasSeenTutorial) {
       const timer = setTimeout(() => {
         setShowChecklistTutorial(true);
-      }, 2000); // 2초 후 표시
+      }, 1000); // 1초 후 표시
       return () => clearTimeout(timer);
+    } else if (movingDate) {
+      // 날짜가 설정되면 튜토리얼 숨기기
+      setShowChecklistTutorial(false);
     }
-  }, [movingDate, user, hasSeenTutorial]);
-
-  // 디버깅용 로그
-  useEffect(() => {
-    console.log('Tutorial state:', { movingDate, user: !!user, hasSeenTutorial, showChecklistTutorial });
-  }, [movingDate, user, hasSeenTutorial, showChecklistTutorial]);
+  }, [user, movingDate, hasSeenTutorial]);
 
   // 튜토리얼 닫기 핸들러
   const handleCloseTutorial = () => {
@@ -66,6 +65,21 @@ const Index = () => {
     { label: "만족한 사용자", value: "98%", icon: Users }
   ];
 
+  // 로그인된 사용자의 경우 마이페이지로 리다이렉트 (단, 로그인 직후에만)
+  useEffect(() => {
+    if (user && location.pathname === '/' && !localStorage.getItem('has-seen-home-after-login')) {
+      navigate('/mypage');
+    }
+  }, [user, navigate, location.pathname]);
+
+  // 로그인한 사용자가 홈화면을 방문했을 때 플래그 설정
+  useEffect(() => {
+    if (user && location.pathname === '/') {
+      localStorage.setItem('has-seen-home-after-login', 'true');
+    }
+  }, [user, location.pathname]);
+
+  // 로그인하지 않은 사용자의 경우 랜딩 페이지
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <div className="container mx-auto px-4 py-8 space-y-12 max-w-7xl">
@@ -76,7 +90,7 @@ const Index = () => {
           </h1>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
             D-Day 기준으로 자동 생성되는 체크리스트로<br />
-            놓치기 쉬운 이사 준비를 완벽하게 관리하세요
+            단계별로 체크하며 완벽한 이사 준비를 해보세요
           </p>
           
           {/* 통계 */}
@@ -96,12 +110,15 @@ const Index = () => {
           </div>
         </div>
 
+        {/* 로그인 버튼 */}
+        <div className="text-center">
+          <Button onClick={signInWithGoogle} size="lg" className="bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90">
+            로그인하고 체크리스트 시작하기
+          </Button>
+        </div>
+
         {/* 체크리스트 튜토리얼 */}
         <div className="space-y-6">
-          <div className="text-center space-y-2">
-            <p className="text-slate-600">단계별로 체크하며 완벽한 이사 준비를 해보세요</p>
-          </div>
-          
           {/* 3단계 한 화면에 표시 */}
           <div className="grid gap-6 md:grid-cols-3">
             
@@ -199,91 +216,7 @@ const Index = () => {
               </div>
             </Card>
           </div>
-          
-          {!user && (
-            <div className="text-center">
-              <Button onClick={signInWithGoogle} size="lg" className="bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90">
-                로그인하고 체크리스트 시작하기
-              </Button>
-            </div>
-          )}
         </div>
-
-        {/* 이사 날짜 설정 - 로그인 후에만 표시 */}
-        {user && (
-          <Card className="p-8 bg-white/80 backdrop-blur-sm border-0 shadow-lg">
-            <div className="space-y-6">
-              <div className="text-center space-y-2">
-                <div className="flex items-center justify-center space-x-2">
-                  <Calendar className="h-6 w-6 text-primary" />
-                  <h2 className="text-2xl font-bold text-slate-800">이사 날짜 설정</h2>
-                </div>
-                <p className="text-slate-600">
-                  날짜를 설정하면 더 정확한 일정 관리가 가능합니다
-                </p>
-              </div>
-              
-              <div className="max-w-md mx-auto space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="moving-date" className="text-slate-700 font-medium">이사 예정일</Label>
-                  <Input
-                    id="moving-date"
-                    type="date"
-                    value={movingDate}
-                    onChange={(e) => setMovingDate(e.target.value)}
-                    min={minDate.toISOString().split('T')[0]}
-                    className="h-12 text-center text-lg"
-                  />
-                </div>
-                
-                {movingDate && (
-                  <div className="text-center p-6 bg-gradient-to-r from-primary/10 to-blue-500/10 rounded-xl border border-primary/20">
-                    <div className="text-4xl font-bold text-primary mb-2">
-                      {(() => {
-                        const today = new Date();
-                        const moving = new Date(movingDate);
-                        const diffTime = moving.getTime() - today.getTime();
-                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                        return diffDays > 0 ? `D-${diffDays}` : diffDays === 0 ? "D-Day" : `D+${Math.abs(diffDays)}`;
-                      })()}
-                    </div>
-                    <div className="text-slate-600 font-medium">이사일까지</div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setMovingDate("")}
-                      className="mt-3 text-slate-500 hover:text-slate-700"
-                    >
-                      날짜 변경
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </div>
-          </Card>
-        )}
-
-        {/* 체크리스트 */}
-        {user && movingDate ? (
-          <div id="checklist-section">
-            <ChecklistSection movingDate={movingDate} />
-          </div>
-        ) : user && !movingDate ? (
-          <Card className="p-8 bg-white/80 backdrop-blur-sm border-0 shadow-lg text-center">
-            <div className="space-y-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-xl flex items-center justify-center mx-auto">
-                <Calendar className="h-8 w-8 text-orange-500" />
-              </div>
-              <div className="space-y-2">
-                <h3 className="text-xl font-semibold text-slate-800">이사날짜를 설정해주세요</h3>
-                <p className="text-slate-600">
-                  이사 예정일을 입력하시면<br />
-                  맞춤형 체크리스트가 생성됩니다.
-                </p>
-              </div>
-            </div>
-          </Card>
-        ) : null}
 
 
         {/* 추가 정보 */}

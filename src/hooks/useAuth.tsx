@@ -85,6 +85,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const signOut = async () => {
+    // 로그아웃 시 홈화면 플래그 초기화
+    localStorage.removeItem('has-seen-home-after-login');
     await supabase.auth.signOut();
   };
 

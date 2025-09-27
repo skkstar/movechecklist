@@ -42,386 +42,348 @@ const ChecklistSection = ({ movingDate }: ChecklistSectionProps) => {
 
   const loadChecklist = async () => {
     if (!user) {
-      // 로그인하지 않은 경우 기본 체크리스트 표시
-      setChecklist([
-        {
-          id: "prep-1",
-          title: "이사업체 선정",
-          description: "최소 3군데 견적 요청 후 예약 진행",
-          category: "preparation",
-          d_day_range: "D-60 ~ D-30",
-          completed: false,
-          has_guide: true,
-          has_service: true,
-        },
-        {
-          id: "prep-2",
-          title: "입주청소 예약",
-          description: "청소업체 미리 비교 예약",
-          category: "preparation",
-          d_day_range: "D-30 ~ D-20",
-          completed: false,
-          has_guide: true,
-          has_service: true,
-        },
-        {
-          id: "prep-3",
-          title: "이사에 필요한 물품 구매",
-          description: "박스, 테이프, 커터칼 등 필수 용품 준비",
-          category: "preparation",
-          d_day_range: "D-20 ~ D-14",
-          completed: false,
-          has_guide: true,
-          has_service: true,
-        },
-        {
-          id: "prep-4",
-          title: "인터넷 이전 신청",
-          description: "이사 당일 설치될 수 있도록 예약",
-          category: "preparation",
-          d_day_range: "D-14",
-          completed: false,
-          has_guide: true,
-          has_service: false,
-        },
-        {
-          id: "prep-5",
-          title: "대형 폐기물 신고",
-          description: "필요한 물품 폐기물 스티커 신청",
-          category: "preparation",
-          d_day_range: "D-7 ~ D-1",
-          completed: false,
-          has_guide: true,
-          has_service: false,
-        },
-        {
-          id: "prep-6",
-          title: "쓰레기봉투 준비",
-          description: "청소용 걸레, 봉투 등 마지막 정리용",
-          category: "preparation",
-          d_day_range: "D-1",
-          completed: false,
-          has_guide: false,
-          has_service: true,
-        },
-        {
-          id: "prep-7",
-          title: "귀중품 챙기기",
-          description: "현금, 귀중품, 서류는 따로 보관",
-          category: "preparation",
-          d_day_range: "D-1",
-          completed: false,
-          has_guide: true,
-          has_service: false,
-        },
-        {
-          id: "moving-1",
-          title: "관리비/전기/가스/수도 정산",
-          description: "출발 전 계량기 사진 필수",
-          category: "moving_day",
-          d_day_range: "D-Day",
-          completed: false,
-          has_guide: true,
-          has_service: false,
-        },
-        {
-          id: "after-1",
-          title: "전기/가스/수도 등록",
-          description: "입주 후 사용 등록 필수",
-          category: "after_moving",
-          d_day_range: "D+1 ~ D+3",
-          completed: false,
-          has_guide: true,
-          has_service: false,
-        },
-        {
-          id: "after-2",
-          title: "인터넷 설치",
-          description: "기사 방문 설치 확인",
-          category: "after_moving",
-          d_day_range: "D+1 ~ D+3",
-          completed: false,
-          has_guide: false,
-          has_service: true,
-        },
-        {
-          id: "after-3",
-          title: "전입신고",
-          description: "주소 변경 신고 (이사 후 14일 이내)",
-          category: "after_moving",
-          d_day_range: "D+1 ~ D+14",
-          completed: false,
-          has_guide: true,
-          has_service: false,
-        },
-      ]);
+      // 로그인하지 않은 경우 빈 체크리스트
+      setChecklist([]);
       setLoading(false);
       return;
     }
 
-    // 로그인한 경우 사용자 체크리스트 로드
-    const { data, error } = await supabase
-      .from('moving_checklists')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('created_at');
-
-    if (error) {
-      console.error('Error loading checklist:', error);
-    } else if (data && data.length > 0) {
-      setChecklist(data as ChecklistItem[]);
-    } else {
-      // 사용자의 첫 체크리스트 생성
-      await createUserChecklist();
-    }
-    setLoading(false);
-  };
-
-  const createUserChecklist = async () => {
-    if (!user) return;
-
-    const defaultItems = [
-      { title: "이사업체 선정", description: "최소 3군데 견적 요청 후 예약 진행", category: "preparation", d_day_range: "D-60 ~ D-30", has_guide: true, has_service: true },
-      { title: "입주청소 예약", description: "청소업체 미리 비교 예약", category: "preparation", d_day_range: "D-30 ~ D-20", has_guide: true, has_service: true },
-      { title: "이사에 필요한 물품 구매", description: "박스, 테이프, 커터칼 등 필수 용품 준비", category: "preparation", d_day_range: "D-20 ~ D-14", has_guide: true, has_service: true },
-      { title: "인터넷 이전 신청", description: "이사 당일 설치될 수 있도록 예약", category: "preparation", d_day_range: "D-14", has_guide: true, has_service: false },
-      { title: "대형 폐기물 신고", description: "필요한 물품 폐기물 스티커 신청", category: "preparation", d_day_range: "D-7 ~ D-1", has_guide: true, has_service: false },
-      { title: "쓰레기봉투 준비", description: "청소용 걸레, 봉투 등 마지막 정리용", category: "preparation", d_day_range: "D-1", has_guide: false, has_service: true },
-      { title: "귀중품 챙기기", description: "현금, 귀중품, 서류는 따로 보관", category: "preparation", d_day_range: "D-1", has_guide: true, has_service: false },
-      { title: "관리비/전기/가스/수도 정산", description: "출발 전 계량기 사진 필수", category: "moving_day", d_day_range: "D-Day", has_guide: true, has_service: false },
-      { title: "전기/가스/수도 등록", description: "입주 후 사용 등록 필수", category: "after_moving", d_day_range: "D+1 ~ D+3", has_guide: true, has_service: false },
-      { title: "인터넷 설치", description: "기사 방문 설치 확인", category: "after_moving", d_day_range: "D+1 ~ D+3", has_guide: false, has_service: true },
-      { title: "전입신고", description: "주소 변경 신고 (이사 후 14일 이내)", category: "after_moving", d_day_range: "D+1 ~ D+14", has_guide: true, has_service: false },
-    ];
-
-    const itemsToInsert = defaultItems.map(item => ({
-      ...item,
-      user_id: user.id,
-    }));
-
-    const { data, error } = await supabase
-      .from('moving_checklists')
-      .insert(itemsToInsert)
-      .select();
-
-    if (error) {
-      console.error('Error creating checklist:', error);
-    } else if (data) {
-      setChecklist(data as ChecklistItem[]);
-    }
-  };
-
-  const toggleItem = async (id: string) => {
-    const item = checklist.find(item => item.id === id);
-    if (!item) return;
-
-    // 로그인한 사용자의 경우 데이터베이스 업데이트
-    if (user) {
-      const { error } = await supabase
-        .from('moving_checklists')
-        .update({ completed: !item.completed })
-        .eq('id', id);
+    try {
+      setLoading(true);
+      
+      // 로그인된 사용자의 체크리스트를 데이터베이스에서 가져오기
+      const { data, error } = await supabase
+        .from('checklist_items')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('category', { ascending: true });
 
       if (error) {
-        console.error('Error updating checklist item:', error);
-        return; // 에러가 있으면 상태 업데이트하지 않음
+        console.error('Error loading checklist:', error);
+        // 에러 시 기본 체크리스트 생성
+        await createDefaultChecklist();
+      } else if (data && data.length > 0) {
+        setChecklist(data);
+      } else {
+        // 데이터가 없으면 기본 체크리스트 생성
+        await createDefaultChecklist();
+      }
+    } catch (error) {
+      console.error('Error in loadChecklist:', error);
+      await createDefaultChecklist();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createDefaultChecklist = async () => {
+    const defaultItems: Omit<ChecklistItem, 'id'>[] = [
+      {
+        title: "이사업체 선정",
+        description: "최소 3군데 견적 요청 후 예약 진행",
+        category: "preparation",
+        d_day_range: "D-20 ~ D-15",
+        completed: false,
+        has_guide: true,
+        has_service: true,
+      },
+      {
+        title: "입주청소 예약",
+        description: "청소업체 미리 비교 예약",
+        category: "preparation",
+        d_day_range: "D-15 ~ D-10",
+        completed: false,
+        has_guide: true,
+        has_service: true,
+      },
+      {
+        title: "이사에 필요한 물품 구매",
+        description: "박스, 테이프, 커터칼 등 필수 용품 준비",
+        category: "preparation",
+        d_day_range: "D-10 ~ D-7",
+        completed: false,
+        has_guide: true,
+        has_service: true,
+      },
+      {
+        title: "인터넷 이전 신청",
+        description: "이사 당일 설치될 수 있도록 예약",
+        category: "preparation",
+        d_day_range: "D-7 ~ D-5",
+        completed: false,
+        has_guide: true,
+        has_service: false,
+      },
+      {
+        title: "대형 폐기물 신고",
+        description: "필요한 물품 폐기물 스티커 신청",
+        category: "preparation",
+        d_day_range: "D-5 ~ D-2",
+        completed: false,
+        has_guide: true,
+        has_service: false,
+      },
+      {
+        title: "쓰레기봉투 준비",
+        description: "청소용 걸레, 봉투 등 마지막 정리용",
+        category: "preparation",
+        d_day_range: "D-2 ~ D-1",
+        completed: false,
+        has_guide: false,
+        has_service: true,
+      },
+      {
+        title: "귀중품 챙기기",
+        description: "현금, 귀중품, 서류는 따로 보관",
+        category: "preparation",
+        d_day_range: "D-1",
+        completed: false,
+        has_guide: true,
+        has_service: false,
+      },
+      {
+        title: "관리비/전기/가스/수도 정산",
+        description: "출발 전 계량기 사진 필수",
+        category: "moving_day",
+        d_day_range: "D-Day",
+        completed: false,
+        has_guide: true,
+        has_service: false,
+      },
+      {
+        title: "전기/가스/수도 등록",
+        description: "입주 후 사용 등록 필수",
+        category: "after_moving",
+        d_day_range: "D+1 ~ D+3",
+        completed: false,
+        has_guide: true,
+        has_service: false,
+      },
+      {
+        title: "인터넷 설치",
+        description: "기사 방문 설치 확인",
+        category: "after_moving",
+        d_day_range: "D+1 ~ D+3",
+        completed: false,
+        has_guide: false,
+        has_service: true,
+      },
+      {
+        title: "전입신고",
+        description: "주소 변경 신고 (이사 후 14일 이내)",
+        category: "after_moving",
+        d_day_range: "D+1 ~ D+14",
+        completed: false,
+        has_guide: true,
+        has_service: false,
+      }
+    ];
+
+    if (user) {
+      try {
+        const { data, error } = await supabase
+          .from('checklist_items')
+          .insert(
+            defaultItems.map(item => ({
+              ...item,
+              user_id: user.id
+            }))
+          )
+          .select();
+
+        if (error) {
+          console.error('Error creating default checklist:', error);
+          setChecklist(defaultItems.map((item, index) => ({ ...item, id: `default-${index}` })));
+        } else {
+          setChecklist(data || []);
+        }
+      } catch (error) {
+        console.error('Error in createDefaultChecklist:', error);
+        setChecklist(defaultItems.map((item, index) => ({ ...item, id: `default-${index}` })));
       }
     }
+  };
 
-    // 로컬 상태 업데이트 (로그인 여부와 관계없이)
-    setChecklist(prev =>
-      prev.map(item =>
-        item.id === id ? { ...item, completed: !item.completed } : item
-      )
+  const toggleItem = async (itemId: string) => {
+    const updatedChecklist = checklist.map(item => 
+      item.id === itemId ? { ...item, completed: !item.completed } : item
     );
+    setChecklist(updatedChecklist);
+
+    if (user) {
+      try {
+        const item = updatedChecklist.find(i => i.id === itemId);
+        if (item) {
+          await supabase
+            .from('checklist_items')
+            .update({ completed: item.completed })
+            .eq('id', itemId);
+        }
+      } catch (error) {
+        console.error('Error updating checklist item:', error);
+      }
+    }
   };
 
-  const getItemsByCategory = (category: keyof typeof categoryInfo) => {
-    return checklist.filter(item => item.category === category);
-  };
-
-  const getCompletedCount = (category: keyof typeof categoryInfo) => {
-    return getItemsByCategory(category).filter(item => item.completed).length;
-  };
-
-  const getTotalCount = (category: keyof typeof categoryInfo) => {
-    return getItemsByCategory(category).length;
-  };
-
-  const handleGuideClick = (itemId: string, itemTitle: string) => {
-    setSelectedGuideItem({ id: itemId, title: itemTitle });
+  const openGuideModal = (itemId: string, title: string) => {
+    setSelectedGuideItem({ id: itemId, title });
     setGuideModalOpen(true);
   };
 
-  const handleCloseGuide = () => {
-    setGuideModalOpen(false);
-    setSelectedGuideItem(null);
+  const getProgressByCategory = (category: keyof typeof categoryInfo) => {
+    const categoryItems = checklist.filter(item => item.category === category);
+    const completedItems = categoryItems.filter(item => item.completed);
+    return categoryItems.length > 0 ? (completedItems.length / categoryItems.length) * 100 : 0;
   };
 
-  const getDDay = () => {
-    if (!movingDate) return 0;
-    const today = new Date();
-    const moving = new Date(movingDate);
-    const diffTime = moving.getTime() - today.getTime();
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  const getOverallProgress = () => {
+    if (checklist.length === 0) return 0;
+    const completedItems = checklist.filter(item => item.completed);
+    return (completedItems.length / checklist.length) * 100;
   };
-
-  const dDay = getDDay();
 
   if (loading) {
     return (
-      <div className="space-y-6">
-        {Array.from({ length: 3 }).map((_, i) => (
-          <Card key={i} className="p-6">
-            <div className="animate-pulse space-y-4">
-              <div className="h-6 bg-muted rounded w-1/3"></div>
-              <div className="h-4 bg-muted rounded w-1/4"></div>
-              <div className="space-y-2">
-                {Array.from({ length: 3 }).map((_, j) => (
-                  <div key={j} className="h-16 bg-muted rounded"></div>
-                ))}
-              </div>
-            </div>
-          </Card>
-        ))}
+      <div className="flex items-center justify-center p-8">
+        <div className="text-center space-y-4">
+          <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p className="text-slate-600">체크리스트를 불러오는 중...</p>
+        </div>
       </div>
     );
   }
 
-  return (
-    <div className="space-y-6">
-      {/* 진행률 표시 */}
-      {movingDate && (
-        <Card className="p-6">
-          <div className="grid gap-4 md:grid-cols-3">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-primary mb-2">
-                {dDay > 0 ? `D-${dDay}` : dDay === 0 ? "D-Day" : `D+${Math.abs(dDay)}`}
-              </div>
-              <div className="flex items-center justify-center space-x-1 text-muted-foreground">
-                <Calendar className="h-4 w-4" />
-                <span className="text-sm">이사일까지</span>
-              </div>
-            </div>
-            
-            <div className="text-center">
-              <div className="text-3xl font-bold text-primary mb-2">
-                {Math.round((checklist.filter(item => item.completed).length / checklist.length) * 100)}%
-              </div>
-              <div className="text-sm text-muted-foreground">전체 진행률</div>
-              <Progress 
-                value={(checklist.filter(item => item.completed).length / checklist.length) * 100} 
-                className="mt-3" 
-              />
-            </div>
-            
-            <div className="text-center">
-              <div className="text-3xl font-bold text-primary mb-2">
-                {checklist.filter(item => item.completed).length}/{checklist.length}
-              </div>
-              <div className="text-sm text-muted-foreground">완료된 항목</div>
-            </div>
+  if (checklist.length === 0) {
+    return (
+      <Card className="p-8 bg-white rounded-container shadow-lg text-center">
+        <div className="space-y-4">
+          <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto">
+            <Calendar className="h-8 w-8 text-purple-500" />
           </div>
-        </Card>
-      )}
+          <div className="space-y-2">
+            <h3 className="text-xl font-semibold text-slate-800">체크리스트가 준비되지 않았습니다</h3>
+            <p className="text-slate-600">
+              이사 예정일을 설정하면<br />
+              맞춤형 체크리스트가 생성됩니다.
+            </p>
+          </div>
+        </div>
+      </Card>
+    );
+  }
+
+  return (
+    <div className="space-y-8">
 
       {/* 카테고리별 체크리스트 */}
-      {Object.entries(categoryInfo).map(([category, info]) => {
-        const items = getItemsByCategory(category as keyof typeof categoryInfo);
-        const completedCount = getCompletedCount(category as keyof typeof categoryInfo);
-        const totalCount = getTotalCount(category as keyof typeof categoryInfo);
+      {Object.entries(categoryInfo).map(([categoryKey, categoryData]) => {
+        const categoryItems = checklist.filter(item => item.category === categoryKey);
+        const progress = getProgressByCategory(categoryKey as keyof typeof categoryInfo);
+        
+        if (categoryItems.length === 0) return null;
 
         return (
-          <Card key={category} className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center space-x-3">
-                <div className={`w-3 h-3 rounded-full ${info.color}`}></div>
-                <h3 className="text-xl font-semibold">{info.emoji} {info.title}</h3>
-                <Badge variant="secondary">
-                  {completedCount}/{totalCount}개 완료
-                </Badge>
-              </div>
-              <Progress value={(completedCount / totalCount) * 100} className="w-24" />
-            </div>
-
-            <div className="space-y-3">
-              {items.map((item) => (
-                <div
-                  key={item.id}
-                  className={`flex items-start space-x-4 p-4 rounded-lg border transition-all ${
-                    item.completed
-                      ? "bg-green-50 border-green-200"
-                      : "bg-background border-border hover:bg-muted/50"
-                  }`}
-                >
-                  <button
-                    onClick={() => toggleItem(item.id)}
-                    className="flex-shrink-0 mt-1 hover:scale-110 transition-transform"
-                  >
-                    {item.completed ? (
-                      <CheckCircle2 className="h-5 w-5 text-green-600" />
-                    ) : (
-                      <Circle className="h-5 w-5 text-muted-foreground" />
-                    )}
-                  </button>
-
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className={`font-medium ${item.completed ? "line-through text-muted-foreground" : ""}`}>
-                        {item.title}
-                      </h4>
-                      <Badge variant="outline" className="text-xs">
-                        {item.d_day_range}
-                      </Badge>
-                    </div>
-                    <p className={`text-sm ${item.completed ? "line-through text-muted-foreground" : "text-muted-foreground"}`}>
-                      {item.description}
+          <Card key={categoryKey} className="p-6 bg-white rounded-container shadow-lg">
+            <div className="space-y-6">
+              {/* 카테고리 헤더 */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className={`w-12 h-12 ${categoryData.color} rounded-lg flex items-center justify-center`}>
+                    <span className="text-2xl">{categoryData.emoji}</span>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-slate-800">{categoryData.title}</h3>
+                    <p className="text-sm text-slate-600">
+                      {categoryItems.filter(item => item.completed).length} / {categoryItems.length} 완료
                     </p>
-                    
-                    <div className="flex items-center space-x-2 mt-3">
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-2xl font-bold text-purple-500">
+                    {Math.round(progress)}%
+                  </div>
+                  <Progress value={progress} className="w-24 h-2" />
+                </div>
+              </div>
+
+              {/* 체크리스트 아이템들 */}
+              <div className="space-y-3">
+                {categoryItems.map((item) => (
+                  <div
+                    key={item.id}
+                    className={`flex items-center space-x-4 p-4 rounded-lg border transition-all ${
+                      item.completed
+                        ? 'bg-green-50 border-green-200'
+                        : 'bg-slate-50 border-slate-200 hover:bg-purple-50'
+                    }`}
+                  >
+                    <button
+                      onClick={() => toggleItem(item.id)}
+                      className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
+                        item.completed
+                          ? 'bg-green-500 border-green-500'
+                          : 'border-slate-300 hover:border-purple-500'
+                      }`}
+                    >
+                      {item.completed && (
+                        <CheckCircle2 className="w-4 h-4 text-white" />
+                      )}
+                    </button>
+
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center space-x-2">
+                        <h4 className={`font-medium ${
+                          item.completed ? 'text-green-800 line-through' : 'text-slate-800'
+                        }`}>
+                          {item.title}
+                        </h4>
+                        <Badge variant="outline" className="text-xs">
+                          {item.d_day_range}
+                        </Badge>
+                      </div>
+                      <p className={`text-sm mt-1 ${
+                        item.completed ? 'text-green-600' : 'text-slate-600'
+                      }`}>
+                        {item.description}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center space-x-2">
                       {item.has_guide && (
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          variant="ghost"
                           size="sm"
-                          onClick={() => handleGuideClick(item.id, item.title)}
+                          onClick={() => openGuideModal(item.id, item.title)}
+                          className="text-purple-500 hover:text-purple-600"
                         >
-                          <Info className="h-4 w-4 mr-1" />
-                          가이드
+                          <Info className="w-4 h-4" />
                         </Button>
                       )}
                       {item.has_service && (
-                        <Button variant="outline" size="sm">
-                          <ExternalLink className="h-4 w-4 mr-1" />
-                          서비스
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-blue-500 hover:text-blue-600"
+                        >
+                          <ExternalLink className="w-4 h-4" />
                         </Button>
                       )}
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </Card>
         );
       })}
 
-      {!user && (
-        <Card className="p-6 text-center border-dashed border-2">
-          <p className="text-muted-foreground mb-4">
-            로그인하시면 개인 맞춤 체크리스트를 저장하고 관리할 수 있습니다.
-          </p>
-          <Button>구글 로그인하고 시작하기</Button>
-        </Card>
-      )}
-
       {/* 가이드 모달 */}
-      {selectedGuideItem && (
-        <GuideModal
-          isOpen={guideModalOpen}
-          onClose={handleCloseGuide}
-          itemId={selectedGuideItem.id}
-          itemTitle={selectedGuideItem.title}
-        />
-      )}
+      <GuideModal
+        isOpen={guideModalOpen}
+        onClose={() => setGuideModalOpen(false)}
+        itemId={selectedGuideItem?.id}
+        title={selectedGuideItem?.title}
+      />
     </div>
   );
 };
